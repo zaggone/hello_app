@@ -1,0 +1,48 @@
+version: "3.5"
+
+services:
+  load_balancer: # Так я назвал контейнер
+    image: haproxy
+    ports:
+      - "80:80"
+      - "81:81"
+    networks:
+      hello_net:
+        ipv4_address: 192.168.10.100 # Свободный ip из нашей подсети
+    volumes:
+      - ~/demo/haproxy:/usr/local/etc/haproxy
+
+
+  serv1:
+    image: vladimirchabanov/hello_app
+    environment:
+      - HOST_IP=192.168.10.101
+    networks:
+      hello_net:
+        ipv4_address: 192.168.10.101
+
+  serv2:
+    image: vladimirchabanov/hello_app
+    environment:
+      - HOST_IP=192.168.10.102
+    networks:
+      hello_net:
+        ipv4_address: 192.168.10.102
+
+  serv3:
+    image: vladimirchabanov/hello_app
+    environment:
+      - HOST_IP=192.168.10.103
+    networks:
+      hello_net:
+        ipv4_address: 192.168.10.103
+
+
+
+# Здесь создаём docker-сеть
+networks:
+  hello_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.10.0/24
