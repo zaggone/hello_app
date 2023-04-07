@@ -10,7 +10,7 @@ services:
       hello_net:
         ipv4_address: 192.168.10.100 # Свободный ip из нашей подсети
     volumes:
-      - ~/demo/haproxy:/usr/local/etc/haproxy
+      - ~/hello_app/haproxy:/usr/local/etc/haproxy
 
 
   serv1:
